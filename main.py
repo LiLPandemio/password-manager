@@ -10,6 +10,18 @@ from cryptography.exceptions import InvalidKey
 from pynput import keyboard
 import curses
 
+# Agregado: función para generar claves RSA
+def generate_rsa_keys():
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+        backend=default_backend()
+    )
+    public_key = private_key.public_key()
+
+    return private_key, public_key
+
+
 def main():
     print("Welcome to the password manager!")
     
