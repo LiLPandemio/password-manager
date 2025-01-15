@@ -9,7 +9,6 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
 - Gestión interactiva de contraseñas con búsqueda y almacenamiento de nuevos datos.
 - Interfaz de búsqueda implementada con `curses`.
 
-
 ## Requisitos
 - Python 3.8 o superior
 - Dependencias de Python:
@@ -18,7 +17,6 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
   - `curses`
 - Archivo `passwords.enc` generado automáticamente al guardar contraseñas.
 - Archivo `private_key.pem` para almacenar la clave privada cifrada.
-
 
 ## Instalación
 1. Clona este repositorio:
@@ -44,6 +42,47 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
    - Buscar o añadir contraseñas nuevas.
    - Cifrar y almacenar información sensible asociada a dominios.
    - Recuperar contraseñas cifradas usando la clave privada.
+
+## Funcionalidades del Programa
+### `generate_rsa_keys`
+- **Descripción:** Genera un par de claves RSA (pública y privada).
+- **Entrada:** Ninguna.
+- **Salida:** `(private_key, public_key)`.
+
+### `save_encrypted_private_key`
+- **Descripción:** Guarda la clave privada en un archivo, cifrada con una contraseña.
+- **Entrada:** `private_key` (clave privada RSA), `password` (contraseña maestra).
+- **Salida:** Ninguna. Crea un archivo `private_key.pem`.
+
+### `load_encrypted_private_key`
+- **Descripción:** Carga y descifra la clave privada almacenada en el archivo.
+- **Entrada:** `password` (contraseña maestra).
+- **Salida:** Clave privada descifrada o `None` si falla.
+
+### `encrypt_password`
+- **Descripción:** Cifra una contraseña utilizando la clave pública RSA.
+- **Entrada:** `public_key` (clave pública), `password` (contraseña a cifrar).
+- **Salida:** Contraseña cifrada (string base64).
+
+### `decrypt_password`
+- **Descripción:** Descifra una contraseña cifrada con RSA.
+- **Entrada:** `private_key` (clave privada), `encrypted_password` (contraseña cifrada en base64).
+- **Salida:** Contraseña descifrada.
+
+### `save_passwords`
+- **Descripción:** Guarda las contraseñas cifradas en un archivo JSON.
+- **Entrada:** `data` (diccionario de contraseñas).
+- **Salida:** Ninguna. Crea o actualiza el archivo `passwords.enc`.
+
+### `load_passwords`
+- **Descripción:** Carga las contraseñas almacenadas del archivo.
+- **Entrada:** Ninguna.
+- **Salida:** Diccionario de contraseñas cargado desde el archivo.
+
+### `interactive_search`
+- **Descripción:** Permite buscar dominios interactivamente.
+- **Entrada:** `stdscr` (pantalla curses), `data` (diccionario de contraseñas).
+- **Salida:** `(search_query, is_new)` indicando el dominio seleccionado o nuevo.
 
 ## Seguridad
 - Las claves y contraseñas están protegidas utilizando estándares modernos de cifrado.
