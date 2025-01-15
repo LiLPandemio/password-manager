@@ -21,6 +21,34 @@ def generate_rsa_keys():
 
     return private_key, public_key
 
+# Agregado: función para cargar la clave privada cifrada
+def load_encrypted_private_key(password):
+    try:
+        with open("private_key.pem", "rb") as key_file:
+            content = key_file.read()
+
+        salt = content[:16]
+        encrypted_private_key = content[16:]
+
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+            backend=default_backend()
+        )
+        key = kdf.derive(password.encode())
+
+        private_key = serialization.load_pem_private_key(
+            encrypted_private_key,
+            password=key,
+            backend=default_backend()
+        )
+        return private_key
+
+    except (InvalidKey, ValueError):
+        print("Error: Incorrect password or invalid private key file.")
+        return None
 
 # Agregado: función para guardar la clave privada cifrada
 def save_encrypted_private_key(private_key, password):
