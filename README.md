@@ -18,3 +18,29 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
   - `curses`
 - Archivo `passwords.enc` generado automáticamente al guardar contraseñas.
 - Archivo `private_key.pem` para almacenar la clave privada cifrada.
+
+
+## Instalación
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/lilpandemio/password-manager.git
+   cd password-manager
+   ```
+
+2. Instala las dependencias:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Uso
+1. Ejecuta el programa:
+   ```bash
+   python main.py
+   ```
+
+2. Durante el primer uso, se te pedirá que configures una contraseña maestra para proteger tu clave privada. 
+
+3. Opciones principales:
+   - Buscar o añadir contraseñas nuevas.
+   - Cifrar y almacenar información sensible asociada a dominios.
+   - Recuperar contraseñas cifradas usando la clave privada.
