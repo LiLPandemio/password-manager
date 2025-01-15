@@ -33,6 +33,18 @@ def encrypt_password(public_key, password):
     )
     return base64.b64encode(encrypted).decode()
 
+# Agregado: funciones para guardar y cargar contraseñas
+def save_passwords(data):
+    with open("passwords.enc", "w") as file:
+        json.dump(data, file)
+
+def load_passwords():
+    if os.path.exists("passwords.enc"):
+        with open("passwords.enc", "r") as file:
+            return json.load(file)
+    return {}
+
+
 def decrypt_password(private_key, encrypted_password):
     decrypted = private_key.decrypt(
         base64.b64decode(encrypted_password),
