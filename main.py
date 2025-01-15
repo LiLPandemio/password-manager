@@ -22,6 +22,28 @@ def generate_rsa_keys():
     return private_key, public_key
 
 
+# Agregado: función para guardar la clave privada cifrada
+def save_encrypted_private_key(private_key, password):
+    salt = os.urandom(16)
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+        backend=default_backend()
+    )
+    key = kdf.derive(password.encode())
+
+    encrypted_private_key = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.BestAvailableEncryption(key)
+    )
+
+    with open("private_key.pem", "wb") as key_file:
+        key_file.write(salt + encrypted_private_key)
+
+
 def main():
     print("Welcome to the password manager!")
     
