@@ -33,6 +33,62 @@ def encrypt_password(public_key, password):
     )
     return base64.b64encode(encrypted).decode()
 
+
+# Integración: interfaz interactiva con gestión de contraseñas
+def main():
+    data = load_passwords()
+    private_key, public_key = generate_rsa_keys()
+
+    if not os.path.exists("private_key.pem"):
+        print("Setting up for the first time.\n")
+        password = getpass.getpass("Create a password to secure your private key: ")
+        save_encrypted_private_key(private_key, password)
+    else:
+        password = getpass.getpass("Enter your password to unlock private key: ")
+        private_key = load_encrypted_private_key(password)
+        if not private_key:
+            return
+
+    while True:
+        print("\nOptions:")
+        print("1. Search or add password")
+        print("2. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            def search_ui(stdscr):
+                return interactive_search(stdscr, data)
+
+            domain, is_new = curses.wrapper(search_ui)
+
+            if is_new:
+                username = input("Enter username: ")
+                password = getpass.getpass("Enter password: ")
+                data[domain] = {
+                    "username": username,
+                    "password": encrypt_password(public_key, password)
+                }
+                save_passwords(data)
+                print(f"Password for '{domain}' added successfully!")
+            else:
+                entry = data.get(domain, {})
+                encrypted_password = entry.get("password")
+                username = entry.get("username")
+                master_password = getpass.getpass("Enter your master password to decrypt: ")
+                private_key = load_encrypted_private_key(master_password)
+                if private_key:
+                    print(f"Domain: {domain}")
+                    print(f"Username: {username}")
+                    print(f"Password: {decrypt_password(private_key, encrypted_password)}")
+
+        elif choice == "2":
+            break
+
+        else:
+            print("Invalid option. Try again.")
+
+
 # Agregado: búsqueda interactiva con interfaz usando curses
 def interactive_search(stdscr, data):
     curses.curs_set(0)
