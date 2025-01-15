@@ -21,6 +21,30 @@ def generate_rsa_keys():
 
     return private_key, public_key
 
+# Agregado: funciones para cifrar y descifrar contraseñas
+def encrypt_password(public_key, password):
+    encrypted = public_key.encrypt(
+        password.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return base64.b64encode(encrypted).decode()
+
+def decrypt_password(private_key, encrypted_password):
+    decrypted = private_key.decrypt(
+        base64.b64decode(encrypted_password),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return decrypted.decode()
+
+
 # Agregado: función para cargar la clave privada cifrada
 def load_encrypted_private_key(password):
     try:
