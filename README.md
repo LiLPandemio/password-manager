@@ -8,3 +8,13 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
 - Cifrado y descifrado de contraseñas con la clave pública y privada respectivamente.
 - Gestión interactiva de contraseñas con búsqueda y almacenamiento de nuevos datos.
 - Interfaz de búsqueda implementada con `curses`.
+
+
+## Requisitos
+- Python 3.8 o superior
+- Dependencias de Python:
+  - `cryptography`
+  - `pynput`
+  - `curses`
+- Archivo `passwords.enc` generado automáticamente al guardar contraseñas.
+- Archivo `private_key.pem` para almacenar la clave privada cifrada.
