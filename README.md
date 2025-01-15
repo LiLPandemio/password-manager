@@ -44,3 +44,11 @@ Este proyecto es un gestor de contraseñas seguro implementado en Python. Permit
    - Buscar o añadir contraseñas nuevas.
    - Cifrar y almacenar información sensible asociada a dominios.
    - Recuperar contraseñas cifradas usando la clave privada.
+
+## Seguridad
+- Las claves y contraseñas están protegidas utilizando estándares modernos de cifrado.
+- El uso de `PBKDF2` agrega una capa adicional de seguridad al proteger la clave privada.
+
+## Créditos
+- Marc Moreno
+- Adria Vidosa
