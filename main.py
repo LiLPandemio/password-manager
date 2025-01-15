@@ -33,6 +33,45 @@ def encrypt_password(public_key, password):
     )
     return base64.b64encode(encrypted).decode()
 
+# Agregado: búsqueda interactiva con interfaz usando curses
+def interactive_search(stdscr, data):
+    curses.curs_set(0)
+    stdscr.clear()
+
+    search_query = ""
+    selected_index = 0
+
+    while True:
+        stdscr.clear()
+        matches = [domain for domain in data if search_query.lower() in domain.lower()]
+        matches.append(f"-- Add password for '{search_query}' --")
+
+        stdscr.addstr(0, 0, f"Search: {search_query}")
+
+        for idx, domain in enumerate(matches):
+            if idx == selected_index:
+                stdscr.addstr(idx + 1, 0, domain, curses.A_REVERSE)
+            else:
+                stdscr.addstr(idx + 1, 0, domain)
+
+        key = stdscr.getch()
+
+        if key == curses.KEY_UP:
+            selected_index = max(0, selected_index - 1)
+        elif key == curses.KEY_DOWN:
+            selected_index = min(len(matches) - 1, selected_index + 1)
+        elif key == curses.KEY_BACKSPACE or key == 127 or key == 8:
+            search_query = search_query[:-1]
+            selected_index = 0
+        elif key == 10:  # Enter
+            if selected_index == len(matches) - 1:
+                return search_query, True
+            return matches[selected_index], False
+        elif 32 <= key <= 126:
+            search_query += chr(key)
+            selected_index = 0
+
+
 # Agregado: funciones para guardar y cargar contraseñas
 def save_passwords(data):
     with open("passwords.enc", "w") as file:
